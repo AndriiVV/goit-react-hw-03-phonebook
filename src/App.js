@@ -6,6 +6,8 @@ import ContactList from "./components/ContactList/ContactList";
 
 import { Component } from "react";
 
+const KEY = "contacts";
+
 class App extends Component {
 	getFromLocalStorage = (key) => {
 		try {
@@ -15,10 +17,6 @@ class App extends Component {
 			if (rawData === null || !Array.isArray(contacts)) {
 				return [];
 			}
-
-			// if (!Array.isArray(contacts)) {
-			// 	return [];
-			// }
 
 			return contacts.filter(({ id, name, number }) => id && name && number);
 		} catch (error) {
@@ -37,11 +35,11 @@ class App extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { contacts: this.getFromLocalStorage("contacts"), filter: "" };
+		this.state = { contacts: this.getFromLocalStorage(KEY), filter: "" };
 	}
 
 	componentDidUpdate() {
-		this.saveToLocalStorage("contacts", this.state.contacts);
+		this.saveToLocalStorage(KEY, this.state.contacts);
 	}
 
 	addContact = ({ newContact }) => {
