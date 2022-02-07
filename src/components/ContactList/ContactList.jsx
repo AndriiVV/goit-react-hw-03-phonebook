@@ -2,6 +2,7 @@ import styles from "./ContactList.module.css"
 import PropTypes from "prop-types";
 
 const ContactList = ({ contacts, seek, handleDelete }) => {
+  if (contacts.length === 0) return null;
   return (
     <ul>
       {contacts
@@ -23,7 +24,7 @@ ContactList.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       number: PropTypes.string.isRequired,
-    }).isRequired
+    })
   ).isRequired,
   seek: PropTypes.string,
   handleDelete: PropTypes.func.isRequired,

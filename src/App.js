@@ -7,15 +7,42 @@ import ContactList from "./components/ContactList/ContactList";
 import { Component } from "react";
 
 class App extends Component {
-	state = {
-		contacts: [
-			{ id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-			{ id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-			{ id: "id-3", name: "Eden Clements", number: "645-17-79" },
-			{ id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-		],
-		filter: "",
+	getFromLocalStorage = (key) => {
+		try {
+			const rawData = localStorage.getItem(key);
+			const contacts = JSON.parse(rawData);
+
+			if (rawData === null || !Array.isArray(contacts)) {
+				return [];
+			}
+
+			// if (!Array.isArray(contacts)) {
+			// 	return [];
+			// }
+
+			return contacts.filter(({ id, name, number }) => id && name && number);
+		} catch (error) {
+			console.log("Error state is: ", error.message);
+		}
 	};
+
+	saveToLocalStorage = (key, value) => {
+		try {
+			const contacts = JSON.stringify(value);
+			localStorage.setItem(key, contacts);
+		} catch (error) {
+			console.log("Error state is: ", error.message);
+		}
+	};
+
+	constructor(props) {
+		super(props);
+		this.state = { contacts: this.getFromLocalStorage("contacts"), filter: "" };
+	}
+
+	componentDidUpdate() {
+		this.saveToLocalStorage("contacts", this.state.contacts);
+	}
 
 	addContact = ({ newContact }) => {
 		if (this.state.contacts.find((item) => item.name === newContact.name)) {
